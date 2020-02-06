@@ -18,25 +18,28 @@ GLFWwindow* window;
 float posXTriangulo=0.0f, posYTriangulo=0.0f, angulo = 0.0f;
 double tiempoActual, tiempoAnterior;
 double velocidadTriangulo = 0.8;
-double velocidadRotacion = 0.1;
+double velocidadRotacion = 180.0;
 
 void actualizar() {
 	tiempoActual = glfwGetTime();
 	double tiempoDiferencial = tiempoActual - tiempoAnterior;
+	double comX = cos(angulo * 3.1416 / 180);
+	double comY = sin(angulo * 3.1416 / 180);
+	/*double comX = cos((angulo+90.0f) * 3.1416 / 180);
+	double comY = sin((angulo+90.0f) * 3.1416 / 180);*/
+
 	int anguloDerecha = glfwGetKey(window, GLFW_KEY_RIGHT);
 	if (anguloDerecha == GLFW_PRESS) { 
-		angulo -= velocidadRotacion;
+		angulo -= velocidadRotacion*tiempoDiferencial;
 	}
 	int anguloIzquierda = glfwGetKey(window, GLFW_KEY_LEFT);
 	if (anguloIzquierda == GLFW_PRESS) {
-		angulo += velocidadRotacion;
+		angulo += velocidadRotacion*tiempoDiferencial;
 	}
 	int estadoArriba = glfwGetKey(window, GLFW_KEY_UP);
 	if (estadoArriba == GLFW_PRESS) {
-		double comX = sin(angulo * 3.1416 / 180);
-		double comY = cos(angulo * 3.1416 / 180);
-		posYTriangulo += comY*(velocidadTriangulo*tiempoDiferencial);
-		posXTriangulo -= comX*(velocidadTriangulo * tiempoDiferencial);
+		posYTriangulo += comX*(velocidadTriangulo*tiempoDiferencial);
+		posXTriangulo -= comY*(velocidadTriangulo * tiempoDiferencial);
 	}
 	tiempoAnterior = tiempoActual;
 	if (angulo >= 360)
@@ -54,6 +57,7 @@ void dibujar() {
 	glPushMatrix();
 	glTranslatef(posXTriangulo,posYTriangulo,0.0f);
 	glRotatef(angulo, 0.0f, 0.0f, 1.0f);
+	glScalef(0.4f, 0.7f, 0.7f);
 
 	glBegin(GL_TRIANGLES);
 
